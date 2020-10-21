@@ -1,0 +1,37 @@
+{
+  "name": "cgt-instant-heal-mv",
+  "version": "0.5.3",
+  "description": "Allows you to have states applied upon certain triggers, like critical hitting, exploiting weaknesses, etc.",
+  "main": "CGT_ReactiveStateApplier_MV.js",
+  "dependencies": {
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.12",
+    "@types/mocha": "^8.0.0",
+    "@types/sinon": "^9.0.4",
+    "chai": "^4.2.0",
+    "fenix-tools": "^0.2.0-b",
+    "mocha": "^8.0.1",
+    "rollup": "^2.00.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-pluginutils": "^2.8.2",
+    "sinon": "^9.0.2",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc & (rollup -c)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CG-Tespy/CGT_Instant_Heal_MV.git"
+  },
+  "author": "CG-Tespy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CG-Tespy/CGT_Instant_Heal_MV/issues"
+  },
+  "homepage": "https://github.com/CG-Tespy/CGT_Instant_Heal_MV#readme"
+}
