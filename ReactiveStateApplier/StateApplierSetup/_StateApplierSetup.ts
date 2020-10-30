@@ -18,7 +18,7 @@ function ApplySetup()
 
 function GetStateAppliers(): StateApplier[]
 {
-    let allStates: RPG.State[] = $dataStates;
+    let allStates: RPG.State[] = $dataStates.slice();
     allStates.shift(); 
     // ^The original first element is null. Best not have to do any null checks
     // as we iterate over the states.

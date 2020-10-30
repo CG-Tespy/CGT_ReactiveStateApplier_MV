@@ -34,7 +34,10 @@ export class StateApplier
     protected Execute(target: Game_Battler, result: Game_ActionResult): void
     {
         if (this.ShouldApplyTo(target))
+        {
+            result.pushAddedState(this.state.id);
             target.addState(this.state.id);
+        }
     }
 
     protected ShouldApplyTo(target: Game_Battler): boolean
