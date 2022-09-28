@@ -10,7 +10,6 @@ export let ReStAp =
     // Will be filled by the time the title screen loads
     stateAppliers: [],
     
-
     // Structures
     StateApplier: StateApplier,
     

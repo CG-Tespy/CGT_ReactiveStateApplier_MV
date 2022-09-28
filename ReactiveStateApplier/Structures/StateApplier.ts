@@ -1,4 +1,6 @@
 import { triggerRegexes, anyInteger } from '../Shared/Shared';
+import { ApplierTargeting } from './ApplierTargeting';
+import { StateApplierSettings } from './StateApplierSettings';
 let Event = CGT.Core.Utils.Event;  
 type Event = CGT.Core.Utils.Event; 
 let ArrayEx = CGT.Core.Extensions.ArrayEx;
@@ -6,8 +8,9 @@ let ArrayEx = CGT.Core.Extensions.ArrayEx;
 /** Applies its state to the relevant Battlers when its event trigger is fired. */
 export class StateApplier
 {
-    private state: RPG.State = null;
     get State(): RPG.State { return this.state; }
+    private state: RPG.State = null;
+    set State(value) { this.state = value; }
 
     private successRate: number = 0;
     /** At least 0. */
@@ -22,23 +25,36 @@ export class StateApplier
     /** Normalized the same way state rates are. */
     get SuccessRateNormalized(): number { return this.successRateNormalized; }
 
-    private signaler: Event;
+    private trigger: Event;
     /** Combat callback event this listens to, to decide when and to what to apply a state. */
-    get Signaler(): Event { return this.signaler; }
-    set Signaler(value)
+    get Trigger(): Event { return this.trigger; }
+    set Trigger(value)
     {
-        this.signaler = value;
+        this.trigger = value;
         this.ListenForTrigger();
     }
     
-    protected Execute(target: Game_Battler, result: Game_ActionResult): void
+    protected Execute(damageArgs: DamageArgs): void
     {
-        if (this.ShouldApplyTo(target))
-        {
-            result.pushAddedState(this.state.id);
+        let target = this.DecideWhatToApplyTo(damageArgs);
+        if (this.ShouldApplyTo(target)) {
             target.addState(this.state.id);
+            this.RegisterAddedStateTo(target);
+            this.UpdateLogWindowAsNeededFor(target);
         }
     }
+
+    protected DecideWhatToApplyTo(damageArgs: DamageArgs): Game_Battler
+    {
+        if (this.Targeting == ApplierTargeting.attackTarget)
+            return damageArgs.Target;
+        else if (this.Targeting == ApplierTargeting.attacker)
+            return damageArgs.User;
+    }
+
+    get Targeting() { return this.targeting; }
+    private targeting: ApplierTargeting = ApplierTargeting.null;
+    set Targeting(value) { this.targeting = value; }
 
     protected ShouldApplyTo(target: Game_Battler): boolean
     {
@@ -55,6 +71,21 @@ export class StateApplier
         return chanceToLand;
     }
 
+    protected RegisterAddedStateTo(target: Game_Battler)
+    {
+        let result = target.result();
+        result.pushAddedState(this.state.id);
+    }
+
+    protected UpdateLogWindowAsNeededFor(target: Game_Battler)
+    {
+        // When the state is being applied to the user, the log window doesn't
+        // show the message letting the player know that... So we have to
+        // make it do that ourselves.
+        if (this.targeting == ApplierTargeting.attacker)
+            BattleManager._logWindow.push("addText", target.name() + this.state.message1);
+    }
+
     /** Creates StateAppliers based on the passed state's notetag contents. */
     static MultiFrom(state: RPG.State): StateApplier[]
     {
@@ -67,7 +98,7 @@ export class StateApplier
             let signaler = signalersThatApply[i];
             let newApp = new StateApplier();
             newApp.state = state;
-            newApp.Signaler = signaler;
+            newApp.Trigger = signaler;
             newApp.SuccessRate = this.GetTriggerSuccessRate(signaler, noteTags);
             newApp.RefreshTriggerListenings();
             apps.push(newApp);
@@ -122,12 +153,35 @@ export class StateApplier
 
     protected UnlistenForTrigger(): void
     {
-        this.signaler.RemoveListener(this.Execute, this);
+        this.trigger.RemoveListener(this.Execute, this);
     }
 
     protected ListenForTrigger(): void
     {
-        this.signaler.AddListener(this.Execute, this);
+        this.trigger.AddListener(this.Execute, this);
     }
 
+}
+
+type DamageArgs = CGT.Core.Battle.DamageArgs;
+
+export class StateApplierFactory
+{
+    static CreateMultiFrom(state: RPG.State)
+    {
+        let settingsArr = StateApplierSettings.MultiFrom(state);
+        let apps = [];
+
+        for (const settings of settingsArr)
+        {
+            let newApplier = new StateApplier();
+            newApplier.State = settings.State;
+            newApplier.SuccessRate = settings.SuccessRate;
+            newApplier.Targeting = settings.Targeting;
+            newApplier.Trigger = settings.Trigger;
+            apps.push(newApplier);
+        }
+
+        return apps;
+    }
 }

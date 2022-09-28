@@ -1,4 +1,4 @@
-import { StateApplier } from '../Structures/StateApplier';
+import { StateApplier, StateApplierFactory } from '../Structures/StateApplier';
 // Check the notetags on the states, registering which are to be applied in response
 // to which battle events.
 
@@ -26,7 +26,7 @@ function GetStateAppliers(): StateApplier[]
 
     for (const state of allStates)
     {
-        let triggersForState = StateApplier.MultiFrom(state);
+        let triggersForState = StateApplierFactory.CreateMultiFrom(state);
         if (triggersForState.length > 0)
             triggers = triggers.concat(triggersForState);
     }

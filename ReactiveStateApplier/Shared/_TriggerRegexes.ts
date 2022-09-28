@@ -1,5 +1,5 @@
 import { eventKeys } from './_EventKeys';
-import { tagPrefix, anyWhitespace, anyInteger } from './_RegexFragments';
+import { tagPrefix, anyWhitespace, anyInteger, targetingKeyword } from './_RegexFragments';
 
 type Event = CGT.Core.Utils.Event;
 
@@ -16,8 +16,9 @@ function SetUpTriggerRegexes()
     {
         let eventEl = events[i];
         let eventKeyEl = eventKeys.get(eventEl);
-        let regexFormat = `${tagPrefix}${anyWhitespace}${eventKeyEl}${anyWhitespace}${anyInteger}`;
-        let regex = new RegExp(regexFormat);
+        let regexFormat = `${tagPrefix}${anyWhitespace}${eventKeyEl}` +
+        `${anyWhitespace}${anyInteger}${anyWhitespace}${targetingKeyword}`;
+        let regex = new RegExp(regexFormat, "gmi");
         triggerRegexes.set(eventEl, regex);
     }
 
