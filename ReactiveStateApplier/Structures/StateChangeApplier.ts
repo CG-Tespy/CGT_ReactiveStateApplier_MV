@@ -26,42 +26,44 @@ export class StateChangeApplier
     BattleEventResponse(damageArgs: DamageArgs)
     {
         let targets = this.FindTargetsFrom(damageArgs);
-        let stateToProc: RPG.State = this.triggerContext.State;
         
-        for (const currentTarget of targets)
+        for (const currentTarget of targets.keys())
         {
-            let procIt = this.ShouldProc(stateToProc, currentTarget);
+            let procIt = this.ShouldProcOn(currentTarget);
             if (!procIt)
                 continue;
 
-            currentTarget.addState(stateToProc.id);
-            this.RegisterStateAsProcced(damageArgs.Result);
+            currentTarget.addState(this.StateToProc.id);
+            let targetingType = targets.get(currentTarget);
+            this.UpdateLogWindowAsNeededFor(currentTarget, targetingType);
         }
         
     }
 
-    protected FindTargetsFrom(damageArgs: DamageArgs): Game_Battler[]
+    protected get StateToProc(): RPG.State { return this.triggerContext.State; }
+
+    protected FindTargetsFrom(damageArgs: DamageArgs)
     {
-        let targets: Game_Battler[] = [];
+        let targets: Map<Game_Battler, StateChangeTarget> = new Map();
         let potentialTargets = this.triggerContext.AppliesTo;
 
         if (ArrayEx.Includes(potentialTargets, StateChangeTarget.Attacker))
-            targets.push(damageArgs.User);
+            targets.set(damageArgs.User, StateChangeTarget.Attacker);
         if (ArrayEx.Includes(potentialTargets, StateChangeTarget.TargetOfAttack))
-            targets.push(damageArgs.Target);
+            targets.set(damageArgs.Target, StateChangeTarget.TargetOfAttack);
 
         return targets;
     }
 
-    protected ShouldProc(state: RPG.State, target: Game_Battler): boolean
+    protected ShouldProcOn(target: Game_Battler): boolean
     {
         if (!this.ShouldTryToProc())
             return false;
 
         // We don't want to do stuff like force states onto enemies that are supposed
         // to be immune to them, so...
-        let susceptibility = target.stateRate(state.id);
-        let whetherWeShould = susceptibility >= Math.random();
+        let susceptibility = target.stateRate(this.StateToProc.id);
+        let whetherWeShould = susceptibility > Math.random();
 
         return whetherWeShould;
     }
@@ -71,11 +73,13 @@ export class StateChangeApplier
         return this.triggerContext.AttemptChanceNormalized >= Math.random();
     }
 
-    protected RegisterStateAsProcced(result: Game_ActionResult)
+    protected UpdateLogWindowAsNeededFor(target: Game_Battler, targeting: StateChangeTarget)
     {
-        // So the battle log updates as appropriate
-        let state = this.triggerContext.State;
-        result.pushAddedState(state.id);
+        // For some reason, the status message for the attacker just doesn't show up
+        if (targeting == StateChangeTarget.Attacker)
+        {
+            BattleManager._logWindow.push("addText", target.name() + this.StateToProc.message1);
+        }
     }
 
 }
