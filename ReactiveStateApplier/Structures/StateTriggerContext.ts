@@ -1,5 +1,5 @@
-import { StateChange } from "./StateChange";
-import { StateChangeTarget } from "./StateChangeTarget";
+import { StateChange } from "./Enums/StateChange";
+import { StateChangeTarget } from "./Enums/StateChangeTarget";
 
 export class StateTriggerContext
 {

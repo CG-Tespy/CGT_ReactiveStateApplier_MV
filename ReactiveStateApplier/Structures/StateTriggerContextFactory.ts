@@ -1,7 +1,7 @@
 import { IParsedStateTriggerContext } from "./IParsedStateTriggerContext";
-import { StateChangeTarget } from "./StateChangeTarget";
+import { StateChangeTarget } from "./Enums/StateChangeTarget";
 import { StateTriggerContext } from "./StateTriggerContext";
-import { StateChange } from "./StateChange"; 
+import { StateChange } from "./Enums/StateChange"; 
 
 let PluginParamEx = CGT.Core.Extensions.PluginParamEx;
 

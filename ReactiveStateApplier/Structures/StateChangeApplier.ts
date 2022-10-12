@@ -1,5 +1,5 @@
 import { ArrayEx } from "../Shared/Shared";
-import { StateChangeTarget } from "./StateChangeTarget";
+import { StateChangeTarget } from "./Enums/StateChangeTarget";
 import { StateTriggerContext } from "./StateTriggerContext";
 
 type DamageArgs = CGT.Core.Battle.DamageArgs;
