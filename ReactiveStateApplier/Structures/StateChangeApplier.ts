@@ -33,9 +33,12 @@ export class StateChangeApplier
             if (!procIt)
                 continue;
 
-            currentTarget.addState(this.StateToProc.id);
             let targetingType = targets.get(currentTarget);
             this.UpdateLogWindowAsNeededFor(currentTarget, targetingType);
+            // ^We want the log window updated first in case the attacker
+            // did a multi-hit attack that can trigger the state more than
+            // once 
+            currentTarget.addState(this.StateToProc.id);
         }
         
     }
@@ -76,7 +79,10 @@ export class StateChangeApplier
     protected UpdateLogWindowAsNeededFor(target: Game_Battler, targeting: StateChangeTarget)
     {
         // For some reason, the status message for the attacker just doesn't show up
-        if (targeting == StateChangeTarget.Attacker)
+        // without this little workaround
+        let targetIsAttacker = targeting == StateChangeTarget.Attacker;
+        let targetAlreadyHasState = target.isStateAffected(this.StateToProc.id);
+        if (targetIsAttacker && !targetAlreadyHasState)
         {
             BattleManager._logWindow.push("addText", target.name() + this.StateToProc.message1);
         }

@@ -28,10 +28,10 @@ type StateTriggerContext = CGT.MoStTr.StateTriggerContext;
 function GetStateAppliers()
 {
     let onCritContexts: StateTriggerContext[] = CGT.MoStTr.Params.OnCrit;
-    let appliersForCrits = GetAppliersFor(onCritContexts);
+    let appliersForCrits = GetAppliersFor(onCritContexts, Callbacks.CriticalHit);
 
     let weaknessHitContexts = CGT.MoStTr.Params.OnWeaknessHit;
-    let appliersForWeaknessHits = GetAppliersFor(weaknessHitContexts);
+    let appliersForWeaknessHits = GetAppliersFor(weaknessHitContexts, Callbacks.WeaknessExploited);
 
     let appliers = 
     {
@@ -42,7 +42,9 @@ function GetStateAppliers()
     return appliers;
 }
 
-function GetAppliersFor(contexts: StateTriggerContext[])
+type Event = CGT.Core.Utils.Event;
+
+function GetAppliersFor(contexts: StateTriggerContext[], battleEvent: Event)
 {
     let appliers = [];
 
@@ -51,7 +53,7 @@ function GetAppliersFor(contexts: StateTriggerContext[])
         let newChangeApplier = new StateChangeApplier();
         // @ts-ignore
         newChangeApplier.TriggerContext = contextEl;
-        newChangeApplier.HaveRespondTo(Callbacks.CriticalHit);
+        newChangeApplier.HaveRespondTo(battleEvent);
         appliers.push(newChangeApplier);
     }
 
