@@ -7,9 +7,11 @@ export class StateTriggerContext
     private name: string = "";
     set Name(value) { this.name = value || ""; }
 
-    get States(): RPG.State[] { return this.states; }
-    private states: RPG.State[] = [];
-    set States(value) { this.states = value || []; }
+    get State(): RPG.State { return this.state; }
+    private state: RPG.State = null;
+    set State(value) { this.state = value; }
+
+    get AttemptChanceNormalized(): number { return this.AttemptChance / 100; }
 
     get AttemptChance(): number { return this.attemptChance; }
     private attemptChance: number = 100;

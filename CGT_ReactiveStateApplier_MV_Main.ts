@@ -31,9 +31,9 @@ webpage links.
 @param Name
 @default SomeName
 
-@param States
-@type state[]
-@default []
+@param State
+@type state
+@default 
 
 @param AttemptChance
 @type number

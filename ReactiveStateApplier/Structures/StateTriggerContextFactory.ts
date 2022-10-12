@@ -42,7 +42,7 @@ export class StateTriggerContextFactory
         let newContext = new StateTriggerContext();
 
         newContext.Name = parsed.Name;
-        newContext.States = this.GetTheStates(parsed.States, $dataStates);
+        newContext.State = this.GetTheStates(parsed.States, $dataStates);
         newContext.AttemptChance = Number(parsed.AttemptChance);
         newContext.StateChangeType = StateChange[parsed.StateChangeType];
         newContext.AppliesTo = this.GetAppliesTo(parsed);

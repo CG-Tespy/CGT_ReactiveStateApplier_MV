@@ -10,8 +10,8 @@ declare namespace CGT
 
         class MoStTrParams
         {
-            get OnCrit(): StateTriggerContext
-            get OnWeaknessHit(): StateTriggerContext
+            get OnCrit(): StateTriggerContext[]
+            get OnWeaknessHit(): StateTriggerContext[]
         }
 
         /** Applies its state to the relevant Battlers when its event trigger is fired. */
@@ -41,10 +41,16 @@ declare namespace CGT
         {
             get Name(): string;
 
-            get States(): RPG.State[];
+            get State(): RPG.State;
 
+            get AttemptChanceNormalized(): number;
+
+            /** 
+             * Since the actual proc chance will depend on the targets' susceptibility
+             * to the States
+             */
             get AttemptChance(): number;
-
+            
             get StateChangeType(): StateChange;
 
             get AppliesTo(): StateChangeTarget[];
