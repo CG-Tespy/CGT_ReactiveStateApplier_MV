@@ -5,6 +5,7 @@ let Event = CGT.Core.Utils.Event;
 type Event = CGT.Core.Utils.Event; 
 let ArrayEx = CGT.Core.Extensions.ArrayEx;
 
+// Ignore how "Applier" is going to be a bit of a misleading part of the name...
 /** Applies its state to the relevant Battlers when its event trigger is fired. */
 export class StateApplier
 {
@@ -17,7 +18,7 @@ export class StateApplier
     get SuccessRate(): number { return this.successRate; }
     set SuccessRate(value)
     {
-        this.successRate = value;
+        this.successRate = value || 0;
         this.successRateNormalized = value / 100.0;
     }
 
@@ -40,7 +41,9 @@ export class StateApplier
         if (this.ShouldApplyTo(target)) {
             target.addState(this.state.id);
             this.RegisterAddedStateTo(target);
-            this.UpdateLogWindowAsNeededFor(target);
+            // this.UpdateLogWindowAsNeededFor(target); 
+            // ^May not be needed anymore... In fact, it could lead to redundant
+            // log window updates
         }
     }
 

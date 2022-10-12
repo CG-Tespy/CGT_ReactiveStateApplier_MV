@@ -13,7 +13,7 @@ function ApplySetup()
     let stateAppliers: StateApplier[] = GetStateAppliers();
 
     // @ts-ignore
-    CGT.ReStAp.stateAppliers = stateAppliers;
+    CGT.MoStTr.stateAppliers = stateAppliers;
 }
 
 function GetStateAppliers(): StateApplier[]

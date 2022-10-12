@@ -2,8 +2,9 @@
 import "./PluginCommandSetup/_PluginCommand_Setup";
 import "./StateApplierSetup/_StateApplierSetup";
 import { StateApplier } from './Structures/_Structures_Setup';
+import "./PluginParamSetup/_PluginParamSetup";
 
-export let ReStAp =
+export let MoStTr =
 {
     version: 10101, // 1.01.01
     
@@ -12,6 +13,8 @@ export let ReStAp =
     
     // Structures
     StateApplier: StateApplier,
+
+    Params: null,
     
 };
 

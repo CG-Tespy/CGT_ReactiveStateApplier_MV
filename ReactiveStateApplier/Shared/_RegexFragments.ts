@@ -1,4 +1,4 @@
-export let tagPrefix = `CGT_ReStAp`;
+export let tagPrefix = `CGT_MoStTr`;
 export let anyWhitespace = `\\s+`;
 export let anyInteger = `\\d+`;
 

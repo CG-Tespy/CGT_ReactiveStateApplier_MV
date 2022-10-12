@@ -1,5 +1,5 @@
 {
-  "name": "cgt-instant-heal-mv",
+  "name": "cgt-more-state-triggers",
   "version": "0.5.3",
   "description": "Allows you to have states applied upon certain triggers, like critical hitting, exploiting weaknesses, etc.",
   "main": "CGT_ReactiveStateApplier_MV.js",

@@ -1,10 +1,18 @@
 declare namespace CGT
 {
-    namespace ReStAp
+    namespace MoStTr
     {
         let version: number;
 
         let stateAppliers: StateApplier[];
+
+        let Params: MoStTrParams;
+
+        class MoStTrParams
+        {
+            get OnCrit(): StateTriggerContext
+            get OnWeaknessHit(): StateTriggerContext
+        }
 
         /** Applies its state to the relevant Battlers when its event trigger is fired. */
         class StateApplier
@@ -27,6 +35,33 @@ declare namespace CGT
 
             public RefreshTriggerListenings(): void
 
+        }
+
+        class StateTriggerContext 
+        {
+            get Name(): string;
+
+            get States(): RPG.State[];
+
+            get AttemptChance(): number;
+
+            get StateChangeType(): StateChange;
+
+            get AppliesTo(): StateChangeTarget[];
+
+            get Notes(): string;
+
+            get Null(): Readonly<StateTriggerContext>;
+        }
+
+        enum StateChangeTarget
+        {
+            Null, Attacker, TargetOfAttack
+        }
+
+        enum StateChange 
+        {
+            Null, Add, Remove
         }
 
     }
