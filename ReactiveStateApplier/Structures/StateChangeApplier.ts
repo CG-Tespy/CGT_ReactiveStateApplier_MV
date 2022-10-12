@@ -53,15 +53,22 @@ export class StateChangeApplier
         return targets;
     }
 
-    protected ShouldProc(state: RPG.State, target: Game_Battler)
+    protected ShouldProc(state: RPG.State, target: Game_Battler): boolean
     {
+        if (!this.ShouldTryToProc())
+            return false;
+
         // We don't want to do stuff like force states onto enemies that are supposed
         // to be immune to them, so...
         let susceptibility = target.stateRate(state.id);
-        let actualProcChance = susceptibility * this.triggerContext.AttemptChanceNormalized;
-        let whetherWeShould = actualProcChance >= Math.random();
+        let whetherWeShould = susceptibility >= Math.random();
 
         return whetherWeShould;
+    }
+
+    protected ShouldTryToProc()
+    {
+        return this.triggerContext.AttemptChanceNormalized >= Math.random();
     }
 
     protected RegisterStateAsProcced(result: Game_ActionResult)

@@ -42,7 +42,10 @@ export class StateTriggerContextFactory
         let newContext = new StateTriggerContext();
 
         newContext.Name = parsed.Name;
-        newContext.State = this.GetTheStates(parsed.States, $dataStates);
+
+        let stateID = Number(parsed.State);
+        newContext.State = $dataStates[stateID];
+
         newContext.AttemptChance = Number(parsed.AttemptChance);
         newContext.StateChangeType = StateChange[parsed.StateChangeType];
         newContext.AppliesTo = this.GetAppliesTo(parsed);
@@ -50,8 +53,6 @@ export class StateTriggerContextFactory
 
         return newContext;
     }
-
-    protected static get GetTheStates() { return PluginParamEx.DatabaseElementsFromStringNumArr; }
 
     protected static GetAppliesTo(parsed: IParsedStateTriggerContext): StateChangeTarget[]
     {

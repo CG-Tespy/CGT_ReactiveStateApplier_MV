@@ -37,6 +37,11 @@ declare namespace CGT
 
         }
 
+        class StateChangeApplier 
+        {
+
+        }
+
         class StateTriggerContext 
         {
             get Name(): string;
@@ -69,6 +74,11 @@ declare namespace CGT
         {
             Null, Add, Remove
         }
+
+        let Appliers: {
+            Crit: StateChangeApplier[],
+            WeaknessHit: StateChangeApplier[]
+        };
 
     }
 }

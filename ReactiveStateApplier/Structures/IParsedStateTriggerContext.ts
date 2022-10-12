@@ -1,7 +1,7 @@
 export interface IParsedStateTriggerContext
 {
     Name: string;
-    States: string;
+    State: string;
     AttemptChance: string;
     StateChangeType: string;
     ApplyToAttacker: string;
